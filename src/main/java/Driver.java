@@ -17,21 +17,16 @@ public class Driver {
     public static void main(String[] args) {
         scanner = new Scanner(System.in);
         System.setProperty("webdriver.chrome.driver", "c:\\chromedriver.exe");
-        driver = new ChromeDriver();
-        driverWait = new WebDriverWait(driver, 4);
-        System.out.println("what is your userName?");
         String password, userName;
-//        userName = scanner.next();
-        userName = "aorihcdd1";
-        password = "ooria470";
-        System.out.println("do you have a debt?");
-        System.out.println("1 for yes");
-        System.out.println("2 for no");
-        boolean debt = scanner.nextInt() == 1;
+        System.out.println("what is your userName?");
+        userName = scanner.next();
         System.out.println("what is your password?");
-//        password = scanner.next();
-        driver.manage().window().maximize();
+        password = scanner.next();
+        boolean debt = getDebt();
+        driver = new ChromeDriver();
         driver.get("https://www.aac.ac.il/");
+        driver.manage().window().maximize();
+        driverWait = new WebDriverWait(driver, 4);
         logIn(userName, password);
         if (debt) {
             WebElement element = driverWait.until(
@@ -39,16 +34,27 @@ public class Driver {
             element.click();
         }
         driver.findElement(By.cssSelector("a[href='https://moodle.aac.ac.il/login/index.php']")).click();
+        driverWait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("a[class = 'aalink coursename']")));
         List<WebElement> coursesList = (driver.findElements(By.cssSelector("a[class = 'aalink coursename']")));
         getCoursesList(coursesList);
-        System.out.println("which course do you want?");
-        int answer = scanner.nextInt();
-        coursesList.get(answer - 1).click();
+        accessCourse(coursesList);
         logout();
     }
 
+    private static boolean getDebt() {
+        System.out.println("do you have a debt?");
+        System.out.println("1 for yes");
+        System.out.println("2 for no");
+        return scanner.nextInt() == 1;
+    }
+
+    private static void accessCourse(List<WebElement> coursesList) {
+        System.out.println("which course do you want?");
+        int answer = scanner.nextInt();
+        coursesList.get(answer - 1).click();
+    }
+
     private static void getCoursesList(List<WebElement> coursesList) {
-        driverWait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("a[class = 'aalink coursename']")));
         System.out.println("your courses list:");
         for (int i = 0; i < coursesList.size(); i++) {
             System.out.println("\t" + (i + 1) + ")" + getTextNode(coursesList.get(i)));
