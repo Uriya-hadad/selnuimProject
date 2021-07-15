@@ -18,10 +18,12 @@ public class Driver {
         scanner = new Scanner(System.in);
         System.setProperty("webdriver.chrome.driver", "c:\\chromedriver.exe");
         String password, userName;
-        System.out.println("what is your userName?");
-        userName = scanner.next();
-        System.out.println("what is your password?");
-        password = scanner.next();
+        userName = "aorihcdd1";
+        password = "ooria470";
+//        System.out.println("what is your userName?");
+//        userName = scanner.next();
+//        System.out.println("what is your password?");
+//        password = scanner.next();
         boolean debt = getDebt();
         driver = new ChromeDriver();
         driver.get("https://www.aac.ac.il/");
@@ -38,6 +40,11 @@ public class Driver {
         List<WebElement> coursesList = (driver.findElements(By.cssSelector("a[class = 'aalink coursename']")));
         getCoursesList(coursesList);
         accessCourse(coursesList);
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         logout();
     }
 
