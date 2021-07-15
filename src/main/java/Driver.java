@@ -18,17 +18,15 @@ public class Driver {
         scanner = new Scanner(System.in);
         System.setProperty("webdriver.chrome.driver", "c:\\chromedriver.exe");
         String password, userName;
-        userName = "aorihcdd1";
-        password = "ooria470";
-//        System.out.println("what is your userName?");
-//        userName = scanner.next();
-//        System.out.println("what is your password?");
-//        password = scanner.next();
+        System.out.println("what is your moodle's userName?");
+        userName = scanner.next();
+        System.out.println("what is your moodle's password?");
+        password = scanner.next();
         boolean debt = getDebt();
         driver = new ChromeDriver();
         driver.get("https://www.aac.ac.il/");
         driver.manage().window().maximize();
-        driverWait = new WebDriverWait(driver, 4);
+        driverWait = new WebDriverWait(driver, 10);
         logIn(userName, password);
         if (debt) {
             WebElement element = driverWait.until(
