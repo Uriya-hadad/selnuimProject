@@ -24,18 +24,18 @@ public class Driver {
         password = scanner.next();
         boolean debt = getDebt();
         driver = new ChromeDriver();
-        driver.get("https://www.aac.ac.il/");
+        driver.get(Data.CAMPUS_URL);
         driver.manage().window().maximize();
         driverWait = new WebDriverWait(driver, 10);
         logIn(userName, password);
         if (debt) {
             WebElement element = driverWait.until(
-                    ExpectedConditions.visibilityOfElementLocated(By.cssSelector("#debtdismissmodal")));
+                    ExpectedConditions.visibilityOfElementLocated(By.cssSelector(Data.DISMISS_DEBT_ID_ATTRIBUTE)));
             element.click();
         }
-        driver.findElement(By.cssSelector("a[href='https://moodle.aac.ac.il/login/index.php']")).click();
-        driverWait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("a[class = 'aalink coursename']")));
-        List<WebElement> coursesList = (driver.findElements(By.cssSelector("a[class = 'aalink coursename']")));
+        driver.findElement(By.cssSelector(Data.MOODLE_LOGIN_CSS_PATTERN)).click();
+        driverWait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(Data.COURSE_LINK_CSS_PATTERN)));
+        List<WebElement> coursesList = (driver.findElements(By.cssSelector(Data.COURSE_LINK_CSS_PATTERN)));
         getCoursesList(coursesList);
         accessCourse(coursesList);
         try {
@@ -67,21 +67,21 @@ public class Driver {
     }
 
     private static void logIn(String userName, String password) {
-        driver.findElement(By.cssSelector("a[href='https://portal.aac.ac.il']")).click();
+        driver.findElement(By.cssSelector(Data.PORTAL_URL_CSS_PATTERN)).click();
         WebElement usernameInput, passwordInput;
-        usernameInput = driver.findElement(By.cssSelector("#Ecom_User_ID"));
+        usernameInput = driver.findElement(By.cssSelector(Data.USER_ID_ATTRIBUTE));
         usernameInput.sendKeys(userName);
-        passwordInput = driver.findElement(By.cssSelector("#Ecom_Password"));
+        passwordInput = driver.findElement(By.cssSelector(Data.PASSWORD_ID_ATTRIBUTE));
         passwordInput.sendKeys(password);
-        driver.findElement(By.cssSelector("#wp-submit")).click();
+        driver.findElement(By.cssSelector(Data.SUBMIT_BUTTON_ID_ATTRIBUTE)).click();
 
     }
 
     private static void logout() {
-        driver.findElement(By.cssSelector("#action-menu-toggle-1")).click();
-        WebElement logOut = driverWait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("a[data-title = 'logout,moodle']")));
+        driver.findElement(By.cssSelector(Data.MENU_ID_ATTRIBUTE)).click();
+        WebElement logOut = driverWait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(Data.MOODLE_LOGOUT_CSS_PATTERN)));
         logOut.click();
-        driver.findElement(By.cssSelector("a[href='https://portal.aac.ac.il/AGLogout']")).click();
+        driver.findElement(By.cssSelector(Data.PORTAL_LOGOUT_CSS_PATTERN)).click();
 
     }
 
